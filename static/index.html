@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lamplight Hangman</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%AA%A2%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="top">
+  <h1>Lamplight Hangman</h1>
+  <nav aria-label="Main">
+    <button class="tab is-active" data-view="play">Play</button>
+    <button class="tab" data-view="board">Leaderboard</button>
+  </nav>
+</header>
+
+<main>
+  <!-- ============ PLAY ============ -->
+  <section id="view-play" class="view">
+
+    <!-- Start screen -->
+    <div id="start" class="start">
+      <div class="start-copy">
+        <h2>Guess the hidden word before the lamp burns out.</h2>
+        <p>A word is chosen at random and shown as blank tiles. Pick letters one at a time. A right letter appears everywhere it occurs. A wrong letter adds a piece to the gallows. Reveal the word before the drawing is finished and you score points.</p>
+      </div>
+      <div class="levels" role="group" aria-label="Choose a difficulty">
+        <button class="level" data-level="easy">
+          <strong>Easy</strong>
+          <span>Short words with common letters. 8 wrong guesses allowed. Score ×1</span>
+        </button>
+        <button class="level" data-level="medium">
+          <strong>Medium</strong>
+          <span>Longer words, a few awkward letters. 6 wrong guesses allowed. Score ×2</span>
+        </button>
+        <button class="level" data-level="hard">
+          <strong>Hard</strong>
+          <span>Long words with rare letters like Q, X, Z. 5 wrong guesses allowed. Score ×3</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Game screen -->
+    <div id="game" class="game" hidden>
+      <div class="stage">
+        <svg id="gallows" viewBox="0 0 240 300" role="img" aria-label="Hangman drawing">
+          <defs>
+            <radialGradient id="glow" cx="50%" cy="22%" r="70%">
+              <stop offset="0" stop-color="var(--lamp)" stop-opacity=".30"/>
+              <stop offset="1" stop-color="var(--lamp)" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="240" height="300" fill="url(#glow)" stroke="none"/>
+          <g fill="none" stroke-linecap="round" stroke-width="6">
+            <path class="part" pathLength="1" d="M20 280 H160"/>
+            <path class="part" pathLength="1" d="M60 280 V30"/>
+            <path class="part" pathLength="1" d="M60 30 H170"/>
+            <path class="part" pathLength="1" d="M170 30 V70"/>
+            <circle class="part" pathLength="1" cx="170" cy="92" r="22"/>
+            <path class="part" pathLength="1" d="M170 114 V190"/>
+            <path class="part" pathLength="1" d="M170 130 L140 165"/>
+            <path class="part" pathLength="1" d="M170 130 L200 165"/>
+            <path class="part" pathLength="1" d="M170 190 L145 240"/>
+            <path class="part" pathLength="1" d="M170 190 L195 240"/>
+          </g>
+        </svg>
+        <div class="pips" id="pips" aria-hidden="true"></div>
+      </div>
+
+      <div class="play">
+        <div class="meta">
+          <div><span class="k">Difficulty</span><span class="v" id="m-level"></span></div>
+          <div><span class="k">Wrong guesses left</span><span class="v" id="m-left"></span></div>
+          <div><span class="k">Score if solved now</span><span class="v" id="m-score"></span></div>
+          <div><span class="k">Session total</span><span class="v" id="m-total">0</span></div>
+        </div>
+
+        <div class="word" id="word" aria-live="polite"></div>
+        <p class="wrong" id="wrong">Wrong letters: none yet</p>
+        <p class="notice" id="notice" role="status"></p>
+
+        <div class="keys" id="keys" role="group" aria-label="Letter keyboard"></div>
+
+        <div class="controls">
+          <button class="ghost" id="btn-new">New game</button>
+          <button class="ghost" id="btn-change">Change difficulty</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LEADERBOARD ============ -->
+  <section id="view-board" class="view" hidden>
+    <div class="board-head">
+      <h2>Top 50 scores</h2>
+      <div class="filters" role="group" aria-label="Filter by difficulty">
+        <button class="chip is-active" data-filter="all">All</button>
+        <button class="chip" data-filter="easy">Easy</button>
+        <button class="chip" data-filter="medium">Medium</button>
+        <button class="chip" data-filter="hard">Hard</button>
+      </div>
+    </div>
+    <ol class="board" id="board"></ol>
+    <p class="empty" id="board-empty" hidden>No scores yet. Win a game and save your name to claim first place.</p>
+  </section>
+</main>
+
+<!-- ============ END-OF-GAME DIALOG ============ -->
+<dialog id="end">
+  <h2 id="end-title"></h2>
+  <p id="end-word"></p>
+  <p id="end-score" class="big"></p>
+  <form id="save-form" method="dialog" hidden>
+    <label for="player">Your name for the leaderboard</label>
+    <input id="player" name="player" maxlength="20" autocomplete="nickname" required>
+    <p class="err" id="save-err" role="alert"></p>
+    <button type="submit" class="primary" id="btn-save">Save score</button>
+  </form>
+  <p id="saved-msg" class="saved" hidden></p>
+  <div class="end-actions">
+    <button class="primary" id="btn-again">Play again</button>
+    <button class="ghost" id="btn-board">View leaderboard</button>
+  </div>
+</dialog>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
