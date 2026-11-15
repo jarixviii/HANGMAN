@@ -1,4 +1,5 @@
-[Project Report - EF101.docx](https://github.com/user-attachments/files/34876926/Project.Report.-.EF101.docx)
+Project Report --- MS Word File: [Project Report - EF101.docx](https://github.com/user-attachments/files/34876926/Project.Report.-.EF101.docx)
+
 Hosted Game Link: <https://jariabbas462.pythonanywhere.com>
 
 # Lamplight Hangman
