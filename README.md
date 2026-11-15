@@ -1,3 +1,6 @@
+[Project Report - EF101.docx](https://github.com/user-attachments/files/34876926/Project.Report.-.EF101.docx)
+
+
 # Lamplight Hangman
 
 Web Hangman game with 7,149-word database, three difficulty levels, scoring and a top-50 leaderboard.
@@ -11,7 +14,9 @@ data/words.csv      the vocabulary (loaded into the database on first start)
 static/             the web page (index.html, style.css, app.js)
 tools/build_words.py how the word list and difficulty tags were produced
 tests_smoke.py      automated tests
-requirements.txt, Procfile, wsgi.py   hosting files
+requirements.txt, Procfile, wsgi.py   hosting files[Project Report - EF101.docx](https://github.com/user-attachments/files/34876942/Project.Report.-.EF101.docx)
+[Project Report - EF101.docx](https://github.com/user-attachments/files/34876935/Project.Report.-.EF101.docx)
+
 ```
 
 ## 1. Run on your own computer
